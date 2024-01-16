@@ -1,7 +1,6 @@
 package peter.alekseychuk.TaskManagementSystem.controller.auth;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,29 +17,37 @@ import peter.alekseychuk.TaskManagementSystem.security.service.AuthenticationSer
 
 import static peter.alekseychuk.TaskManagementSystem.util.ErrorUtil.returnErrorsToClient;
 
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @Validated
-@Api(description = "Контроллер для регистрации и аутентификации пользователей")
+@Tag(name = "Authentication")
 public class AuthController {
 
-    private final AuthenticationService service;
+    private final AuthenticationService authenticationService;
 
+    @Operation(
+            summary = "Post endpoint for user registration",
+            description = "Pass user json to register a user"
+    )
     @PostMapping("/register")
-    @ApiOperation("Регистрация пользователя")
     public ResponseEntity<AuthenticationResponse> register(
             @Valid @RequestBody RegisterRequest request, BindingResult bindingResult
     ) {
         if(bindingResult.hasErrors())
             returnErrorsToClient(bindingResult);
-        return ResponseEntity.ok(service.register(request));
+        return ResponseEntity.ok(authenticationService.register(request));
     }
+
+    @Operation(
+            summary = "Post endpoint for user authentication",
+            description = "Pass auth json to authenticate"
+    )
     @PostMapping("/authenticate")
-    @ApiOperation("Аутентификация пользователя")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @Valid @RequestBody  AuthenticationRequest request
     ) {
-        return ResponseEntity.ok(service.signIn(request));
+        return ResponseEntity.ok(authenticationService.signIn(request));
     }
 }

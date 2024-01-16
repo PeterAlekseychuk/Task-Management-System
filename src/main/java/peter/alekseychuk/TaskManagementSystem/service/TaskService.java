@@ -1,25 +1,28 @@
 package peter.alekseychuk.TaskManagementSystem.service;
 
+import org.springframework.data.domain.PageRequest;
+import peter.alekseychuk.TaskManagementSystem.dto.CommentaryDto;
+import peter.alekseychuk.TaskManagementSystem.dto.TaskDto;
+import peter.alekseychuk.TaskManagementSystem.dto.UserDto;
 import peter.alekseychuk.TaskManagementSystem.model.Task;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface TaskService {
-    void createTask(Task task);
+    Task createTask(TaskDto taskDto);
 
-    Task updateTask(UUID id, Task taskToBeUpdated);
+    Task getTaskById(UUID id);
 
-    List<Task> getAllTasks();
+    Task updateTaskById(UUID id, TaskDto taskToBeUpdated);
 
-    Optional<Task> getTask(UUID id);
+    List<Task> getAllTask(PageRequest of);
 
-    void deleteTask(UUID id);
+    void deleteTaskById(UUID id);
 
-    void changeTaskStatus(String status, UUID id);
+    void changeTaskStatusById(UUID id, TaskDto taskDto);
 
-    void assignAuthor(Task task, UUID id);
+    void assignExecutorToTask(UUID id, UserDto userDto);
 
-
+    List<Task> getPaginatedUserTasks(UUID id, PageRequest pageRequest);
 }

@@ -5,6 +5,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import peter.alekseychuk.TaskManagementSystem.model.Role;
@@ -13,6 +14,7 @@ import peter.alekseychuk.TaskManagementSystem.repository.UserRepository;
 import peter.alekseychuk.TaskManagementSystem.security.AuthenticationRequest;
 import peter.alekseychuk.TaskManagementSystem.security.AuthenticationResponse;
 import peter.alekseychuk.TaskManagementSystem.security.RegisterRequest;
+import peter.alekseychuk.TaskManagementSystem.service.impl.UserServiceImpl;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserServiceImpl userService;
     public AuthenticationResponse register(RegisterRequest request) {
         User user = User.builder()
                 .firstname(request.getFirstname())
@@ -44,8 +47,8 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        User user = userRepository.findByEmail(request.getEmail());
-
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new UsernameNotFoundException("User not found"));
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -55,18 +58,5 @@ public class AuthenticationService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth.getName();
     }
-//    public User getUserByUsername(String username) {
-//        CriteriaQuery<User> criteriaQuery = em.getCriteriaBuilder().createQuery(User.class);
-//        Root<User> userRequest = criteriaQuery.from(User.class);
-//
-//        Expression<String> exp = userRequest.get("username");
-//        Predicate predicate = exp.in(username);
-//
-//        criteriaQuery.where(predicate);
-//        try {
-//            return em.createQuery(criteriaQuery).getSingleResult();
-//        } catch (NoResultException e) {
-//            return new User();
-//        }
-//    }
+
 }
