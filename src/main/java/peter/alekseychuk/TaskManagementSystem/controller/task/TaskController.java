@@ -44,7 +44,10 @@ public class TaskController {
     @PostMapping
     @Secured("ROLE_USER")
     public ResponseEntity<Task> createTask(@RequestBody @Valid TaskDto taskDto) {
-        return new ResponseEntity<>(taskService.createTask(taskDto), HttpStatus.CREATED);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(taskService.createTask(taskDto));
     }
 
     @Operation(
@@ -79,7 +82,10 @@ public class TaskController {
     @PutMapping("/{id}")
     @Secured("ROLE_USER")
     public ResponseEntity<Task> updateTaskById(@PathVariable UUID id, @RequestBody @Valid TaskDto taskDto) {
-        return new ResponseEntity<>(taskService.updateTaskById(id, taskDto), OK);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(taskService.updateTaskById(id, taskDto));
     }
 
     @Operation(
@@ -92,7 +98,7 @@ public class TaskController {
     @Secured("ROLE_EXECUTOR")
     public ResponseEntity<HttpStatus> changeTaskStatusById(@PathVariable UUID id, @RequestBody TaskDto taskDto) {
         taskService.changeTaskStatusById(id, taskDto);
-        return new ResponseEntity<>(OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(
@@ -104,7 +110,10 @@ public class TaskController {
     @Secured("ROLE_USER")
     public ResponseEntity<?> assignExecutorToTask(@PathVariable UUID id, @RequestBody UserDto userDto) {
         taskService.assignExecutorToTask(id, userDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(taskService.assignExecutorToTask(id, userDto));
     }
 
     @Operation(
@@ -113,10 +122,13 @@ public class TaskController {
                     "parameters for paginated output"
     )
     @GetMapping("/user/{id}")
-    public ResponseEntity<?> getPagedUserTasks(@PathVariable UUID id,
+    public ResponseEntity<List<Task>> getPagedUserTasks(@PathVariable UUID id,
                                                @RequestParam(required = false, defaultValue = "0") int page,
                                                @RequestParam(required = false, defaultValue = "10") int size) {
-        return new ResponseEntity<>(taskService.getPaginatedUserTasks(id, PageRequest.of(page, size)), HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(taskService.getPaginatedUserTasks(id, PageRequest.of(page, size)));
     }
 
     @Operation(
@@ -128,7 +140,10 @@ public class TaskController {
                                                     @RequestBody CommentaryDto commentaryDto) {
 
         Commentary commentary = commentaryService.addCommentary(taskId, commentaryDto);
-        return new ResponseEntity<>(commentary, HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(commentary);
     }
 
     @Operation(

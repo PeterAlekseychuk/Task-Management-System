@@ -22,7 +22,7 @@ public interface TaskService {
 
     void changeTaskStatusById(UUID id, TaskDto taskDto);
 
-    void assignExecutorToTask(UUID id, UserDto userDto);
+    Task assignExecutorToTask(UUID id, UserDto userDto);
 
     List<Task> getPaginatedUserTasks(UUID id, PageRequest pageRequest);
 }

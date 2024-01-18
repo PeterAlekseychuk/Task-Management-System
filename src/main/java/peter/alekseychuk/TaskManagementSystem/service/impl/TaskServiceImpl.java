@@ -98,7 +98,7 @@ public class TaskServiceImpl implements TaskService {
     //Назначение конкретным автором исполнителя задачи
     @Override
     @Transactional
-    public void assignExecutorToTask(UUID id, UserDto userDto) {
+    public Task assignExecutorToTask(UUID id, UserDto userDto) {
         User executor = userService.findByEmail(userDto.getEmail());
         User author = userService.getCurrentUser();
         Task task = taskRepository.findById(id)
@@ -110,6 +110,7 @@ public class TaskServiceImpl implements TaskService {
         } else {
             task.setExecutor(executor);
             taskRepository.save(task);
+            return task;
         }
     }
 

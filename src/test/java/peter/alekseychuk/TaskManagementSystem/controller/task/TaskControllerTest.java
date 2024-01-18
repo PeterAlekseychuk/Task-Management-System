@@ -1,10 +1,9 @@
 package peter.alekseychuk.TaskManagementSystem.controller.task;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,6 +45,7 @@ class TaskControllerTest {
     @InjectMocks
     TaskController controller;
 
+
     @Test
     public void handleGetAllTasks_ReturnsValidResponseEntity() {
         //given
@@ -67,6 +67,8 @@ class TaskControllerTest {
         //when
         ResponseEntity<List<Task>> responseEntity = this.controller.getAllTask(0, 2);
         //then
+        Mockito.verify(taskService, Mockito.times(1))
+                .getAllTask(PageRequest.of(0,2));
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
@@ -93,6 +95,7 @@ class TaskControllerTest {
         assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
         assertEquals(task1, responseEntity.getBody());
     }
+
 
 
 }
