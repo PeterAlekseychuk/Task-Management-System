@@ -1,5 +1,5 @@
-Description
+Description:
 Api for task management system
 
-Start
+Start:
 $ git clone https://github.com/PeterAlekseychuk/Task-Management-System.git
