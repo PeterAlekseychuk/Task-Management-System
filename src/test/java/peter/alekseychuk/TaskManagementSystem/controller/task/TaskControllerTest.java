@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +28,13 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.ResponseEntity.status;
 
 @ExtendWith(MockitoExtension.class)
 class TaskControllerTest {
 
-    String expectedMimeType = "application/json";
+    private static final UUID ID = new UUID(1, 1);
     @Mock
     TaskServiceImpl taskService;
     @Mock
@@ -61,15 +61,37 @@ class TaskControllerTest {
                 .status(TaskStatus.IN_PROCESS)
                 .priority(TaskPriority.MEDiUM)
                 .build();
-        var tasks = List.of(task1, task2);
-        doReturn(tasks).when(this.taskRepository).findAll();
+        List<Task> tasks = List.of(task1, task2);
+        Mockito.when(this.taskService.getAllTask(PageRequest.of(0, 2)))
+                .thenReturn(tasks);
         //when
-        var responseEntity = this.controller.getAllTask(1, 2);
+        ResponseEntity<List<Task>> responseEntity = this.controller.getAllTask(0, 2);
         //then
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
         assertEquals(tasks, responseEntity.getBody());
+    }
+
+    @Test
+    public void getTaskById_shouldFindTask_WhenExists() {
+        //given
+        Task task1 = Task.builder()
+                .id(UUID.randomUUID())
+                .header("header")
+                .description("description")
+                .status(TaskStatus.IN_PROCESS)
+                .priority(TaskPriority.MEDiUM)
+                .build();
+        Mockito.when(this.taskService.getTaskById(task1.getId()))
+                .thenReturn(task1);
+        //when
+        ResponseEntity<Task> responseEntity = this.controller.getTaskById(task1.getId());
+        //then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
+        assertEquals(task1, responseEntity.getBody());
     }
 
 

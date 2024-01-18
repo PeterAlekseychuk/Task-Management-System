@@ -53,9 +53,11 @@ public class TaskController {
     )
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable UUID id) {
-        return new ResponseEntity<>(taskService.getTaskById(id), HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(taskService.getTaskById(id));
     }
-
 
     @Operation(
             summary = "Get endpoint for getting all tasks",
@@ -64,9 +66,10 @@ public class TaskController {
     @GetMapping()
     public ResponseEntity<List<Task>> getAllTask(@RequestParam(required = false, defaultValue = "0") int page,
                                                  @RequestParam(required = false, defaultValue = "1000000") int size) {
-        return ResponseEntity.ok()
+        return ResponseEntity
+                .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(taskService.getAllTask(PageRequest.of(page, size)));
+                .body(taskService.getAllTask(PageRequest.of(page,size)));
     }
 
     @Operation(
