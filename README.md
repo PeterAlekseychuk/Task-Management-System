@@ -1,8 +1,8 @@
 # Description:
 ## API for task management system that allows create, read, update, delete tasks. Every task has author, executor and a commentaries.
-## API has has registration and authenctication provided by Spring security and jwt token.
+## API has has registration and authenctication with email and password provided by Spring security and jwt token.
 # Authenticate endPoint with jwt token:
-## ![auth](https://github.com/PeterAlekseychuk/Task-Management-System/assets/79986053/34e2f67a-82b0-42bf-99ac-fa7ae9f14522)
+## ![auth](https://github.com/PeterAlekseychuk/Task-Management-System/assets/79986053/9f27a80f-a1da-47b9-b62f-5912d1eb2dde)
 # GetAllTask endPoint:
 ## ![getAllTasks](https://github.com/PeterAlekseychuk/Task-Management-System/assets/79986053/69522c24-3a5a-476a-8f5a-1455a8a8741d)
 # CreateTask endPoint:
