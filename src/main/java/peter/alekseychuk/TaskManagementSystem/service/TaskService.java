@@ -20,7 +20,7 @@ public interface TaskService {
 
     void deleteTaskById(UUID id);
 
-    void changeTaskStatusById(UUID id, TaskDto taskDto);
+    Task changeTaskStatusById(UUID id, TaskDto taskDto);
 
     Task assignExecutorToTask(UUID id, UserDto userDto);
 

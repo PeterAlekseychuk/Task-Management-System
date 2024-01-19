@@ -17,6 +17,7 @@ import peter.alekseychuk.TaskManagementSystem.model.Commentary;
 import peter.alekseychuk.TaskManagementSystem.model.Task;
 import peter.alekseychuk.TaskManagementSystem.service.impl.CommentaryServiceImpl;
 import peter.alekseychuk.TaskManagementSystem.service.impl.TaskServiceImpl;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -72,7 +73,7 @@ public class TaskController {
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(taskService.getAllTask(PageRequest.of(page,size)));
+                .body(taskService.getAllTask(PageRequest.of(page, size)));
     }
 
     @Operation(
@@ -96,9 +97,12 @@ public class TaskController {
     )
     @PatchMapping("/{id}")
     @Secured("ROLE_EXECUTOR")
-    public ResponseEntity<HttpStatus> changeTaskStatusById(@PathVariable UUID id, @RequestBody TaskDto taskDto) {
-        taskService.changeTaskStatusById(id, taskDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Task> changeTaskStatusById(@PathVariable UUID id, @RequestBody TaskDto taskDto) {
+
+        return  ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(taskService.changeTaskStatusById(id, taskDto));
     }
 
     @Operation(
@@ -108,7 +112,7 @@ public class TaskController {
     )
     @PostMapping("/assign/{id}")
     @Secured("ROLE_USER")
-    public ResponseEntity<?> assignExecutorToTask(@PathVariable UUID id, @RequestBody UserDto userDto) {
+    public ResponseEntity<Task> assignExecutorToTask(@PathVariable UUID id, @RequestBody UserDto userDto) {
         taskService.assignExecutorToTask(id, userDto);
         return ResponseEntity
                 .ok()
@@ -123,8 +127,8 @@ public class TaskController {
     )
     @GetMapping("/user/{id}")
     public ResponseEntity<List<Task>> getPagedUserTasks(@PathVariable UUID id,
-                                               @RequestParam(required = false, defaultValue = "0") int page,
-                                               @RequestParam(required = false, defaultValue = "10") int size) {
+                                                        @RequestParam(required = false, defaultValue = "0") int page,
+                                                        @RequestParam(required = false, defaultValue = "10") int size) {
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)

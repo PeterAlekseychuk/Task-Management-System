@@ -68,7 +68,7 @@ class TaskControllerTest {
         ResponseEntity<List<Task>> responseEntity = this.controller.getAllTask(0, 2);
         //then
         Mockito.verify(taskService, Mockito.times(1))
-                .getAllTask(PageRequest.of(0,2));
+                .getAllTask(PageRequest.of(0, 2));
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
@@ -96,6 +96,25 @@ class TaskControllerTest {
         assertEquals(task1, responseEntity.getBody());
     }
 
-
-
+    @Test
+    public void changeTaskStatusById_shouldChangeStatus() {
+        //given
+        TaskDto taskDto = TaskDto.builder()
+                .status(TaskStatus.IN_PROCESS)
+                .build();
+        Task task = Task.builder()
+                .id(ID)
+                .status(TaskStatus.WAITING)
+                .build();
+        Mockito.when(this.taskService.changeTaskStatusById(ID, taskDto))
+                .thenReturn(task);
+        //when
+        ResponseEntity<Task> responseEntity = this.controller.changeTaskStatusById(ID, taskDto);
+        task.setStatus(taskDto.getStatus());
+        //then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, responseEntity.getHeaders().getContentType());
+        assertEquals(taskDto.getStatus(), task.getStatus());
+    }
 }

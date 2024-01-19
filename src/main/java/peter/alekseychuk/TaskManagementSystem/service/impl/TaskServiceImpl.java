@@ -86,12 +86,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void changeTaskStatusById(UUID id, TaskDto taskDto) {
+    public Task changeTaskStatusById(UUID id, TaskDto taskDto) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(TaskNotFoundException::new);
 
         task.setStatus(taskDto.getStatus());
         taskRepository.save(task);
+        return task;
     }
 
 
