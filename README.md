@@ -11,4 +11,6 @@
 ## ![swager](https://github.com/PeterAlekseychuk/Task-Management-System/assets/79986053/3a1db03e-54bd-4331-ad20-71d9106f68d2)
 
 # Start:
-## git clone https://github.com/PeterAlekseychuk/Task-Management-System.git
+## $ git clone https://github.com/PeterAlekseychuk/Task-Management-System.git
+## $ docker-compose build
+## $ docker-compose up
