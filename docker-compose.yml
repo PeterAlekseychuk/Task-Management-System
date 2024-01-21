@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+
+  task-management-system-service:
+    build: ./taskService
+    ports:
+      - 8080:80
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 5432:5432
