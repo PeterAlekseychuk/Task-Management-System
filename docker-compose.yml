@@ -8,6 +8,16 @@ services:
       - 8080:80
     depends_on:
       - db
+    environment:
+      - spring.datasource.driver-class-name=org.postgresql.Driver
+      - spring.datasource.url=jdbc:postgresql://localhost:5432/Task-Management-System
+      - spring.datasource.username=postgres
+      - spring.datasource.password=admin
+      - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+      - spring.jpa.properties.hibernate.show_sql=true
+      - spring.jpa.hibernate.ddl-auto = update
+      - spring.mvc.hiddenmethod.filter.enabled=true
+
 
   db:
     image: postgres
@@ -15,7 +25,6 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: Task-Management-System
 
   adminer:
     image: adminer
